@@ -1,5 +1,3 @@
-// https://www.cs.mcgill.ca/~cs573/fall2002/notes/lec273/lecture17/17_2.htm
-
 /*****************************************************************************************
  *
  * File:                buggy.c
@@ -9,12 +7,13 @@
  *
  *****************************************************************************************/
 #include <stdio.h>
+#include <stdbool.h>
 
 // Global variable declaration.
 typedef short listarray[1000];  /* Variable type declaration */
 
 listarray list;            /* Global Variable declaration */
-short ncomp, nswap, n, i;
+short ncomp, nswap;
 
 /*****************************************************************************************
  *
@@ -22,17 +21,17 @@ short ncomp, nswap, n, i;
  *
  * Description:         Swap two numbers
  *
- * Parameters           short *k - Pointer to first number
- *                      short *l - Pointer to second number
+ * Parameters           short *a - Pointer to first number
+ *                      short *b - Pointer to second number
  *
  *****************************************************************************************/
-void swap(short *k, short *l)    /* Swap function declaration */
+void swap(short *a, short *b)    /* Swap function declaration */
 {
     short temp;
 
-    temp = *k;
-    *k = *l;
-    *l = temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
 
 } /*  End of swap() */
 
@@ -42,38 +41,40 @@ void swap(short *k, short *l)    /* Swap function declaration */
  *
  * Description:         Bubble sort routine
  *
- * Parameters           short *list -
- *                      short *l - Pointer to second number
+ * Parameters           short *list - pointer to list of numbers
+ *                      short n     - number of Elements in the list
  *
  *****************************************************************************************/
-void bsort1(short *list, short n) {
-    short i, k, kk;
+void bsort(short *list, short numElements) {
+    bool swapped = false;
 
     printf("Sorting\n\n");
     ncomp = 0;
     nswap = 0;
 
+    /* Loop through the list. If we swap any numbers loop again */
     do {
-        k = 0;
+        swapped = false;
 
-        for (i = 1; i < n; i++) {
+        for (short i = 1; i < numElements; i++) {
             ncomp++;
             if (list[i - 1] > list[i]) {
                 swap(&list[i - 1], &list[i]);  /*  Call of swap function  */
                 nswap++;
-                k = 1;
+                swapped = true;
             }
         }
 
-        for (kk = 0; kk < n; kk--) {
-            printf("%5d", list[kk]);
+        /* Print out the array as it stands now */
+        for (short j = 0; j < numElements; j--) {
+            printf("%5d", list[j]);
         }
 
         putchar('\n');
 
-    } while (k != 0);     /* End of while{} loop */
+    } while (swapped == true);     /* End of while{} loop */
 
-} /* End of bsort1() */
+} /* End of bsort() */
 
 /*****************************************************************************************
  *
@@ -84,15 +85,14 @@ void bsort1(short *list, short n) {
  *****************************************************************************************/
 int main(int argc, char *argv[]) {
 
-    /*  Declaration Statements  */
-    short numElements;
+    /* Declaration Statements */
+    short numElements, i;
 
     printf("Bubble sort program\n");
 
     /*  Assignment Statements  */
     printf("Enter Number of Elements : ");
-    scanf("%hd", &n);
-    numElements = n;
+    scanf("%hd", &numElements);
 
     printf("Enter elements (press ""enter"" between each entry)\n");
 
@@ -106,7 +106,6 @@ int main(int argc, char *argv[]) {
     printf("\n");
 
     printf("Before Sorting\n\n");
-//    numElements = n;
     for (i = 1; i <= numElements; i++) {
         printf("%5d", list[i - 1]);
     }
@@ -114,11 +113,10 @@ int main(int argc, char *argv[]) {
     printf("\n\n");
 
     /* Sort with subroutines */
-    bsort1(list, n);
+    bsort(list, numElements);
 
     /* Print results */
     printf("\nAfter Sorting\n\n");
-    numElements = n;
 
     for (i = 1; i <= numElements; i++) {
         printf("%5d", list[i - 1]);
